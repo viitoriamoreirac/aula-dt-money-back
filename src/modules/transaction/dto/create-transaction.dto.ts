@@ -1,13 +1,20 @@
 import { TransactionType } from '@prisma/client';
-import { IsEnum, IsString, MinLength } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsString, MinLength } from 'class-validator';
 
 export class CreateTransactionDto {
-  @IsString({ message: 'Title must be a string' })
-  @MinLength(5, { message: 'Title must be at least 5 characters long' })
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(3)
   title: string;
+
+  @IsString()
+  @IsNotEmpty()
   category: string;
-  data: Date;
+
+  @IsNumber()
+  @IsNotEmpty()
   price: number;
+
   @IsEnum(TransactionType)
   type: TransactionType;
 }

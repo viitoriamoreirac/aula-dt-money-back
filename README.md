@@ -1,47 +1,37 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 📌 DT Money Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Como Executar
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
+1. **Instale as dependências:**
 
 ```bash
-$ pnpm install
+pnpm install
 ```
 
-## Compile and run the project
+2. **Configure o banco de dados:**
+
+Crie um arquivo `.env` na raiz do projeto com:
+
+```env
+DATABASE_URL="file:./prisma/dev.db"
+```
+3. **Execute as migrações:**
+
+```bash
+pnpm prisma migrate dev
+```
+
+4. **Compile and run the project**
 
 ```bash
 # development
-$ pnpm run start
+pnpm run start
 
 # watch mode
-$ pnpm run start:dev
+pnpm run start:dev
 
 # production mode
-$ pnpm run start:prod
+pnpm run start:prod
 ```
 
 ## Run tests
@@ -56,6 +46,142 @@ $ pnpm run test:e2e
 # test coverage
 $ pnpm run test:cov
 ```
+A API estará disponível em: [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 🔍 Rotas da API
+
+| Método | Rota                | Descrição                     | Status HTTP      |
+| ------ | ------------------- | ----------------------------- | ---------------- |
+| POST   | `/transactions`     | Cria uma nova transação       | `201 Created`    |
+| GET    | `/transactions`     | Lista todas as transações     | `200 OK`         |
+| GET    | `/transactions/:id` | Busca uma transação por ID    | `200 OK`         |
+| PATCH  | `/transactions/:id` | Atualiza uma transação por ID | `200 OK`         |
+| DELETE | `/transactions/:id` | Remove uma transação por ID   | `204 No Content` |
+
+---
+
+## 📝 Exemplos de Uso
+
+### Criar Transação (POST)
+
+**Request:**
+
+```bash
+curl -X POST http://localhost:3000/transactions \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Salário","price":3000,"category":"Trabalho","type":"INCOME"}'
+```
+
+**Response (201):**
+
+```json
+{
+  "id": "d94f1c4a-...",
+  "title": "Salário",
+  "price": 3000,
+  "category": "Trabalho",
+  "type": "INCOME",
+  "createdAt": "2025-06-15T00:00:00.000Z"
+}
+```
+
+---
+
+### Listar Transações (GET)
+
+**Request:**
+
+```bash
+curl -X GET http://localhost:3000/transactions
+```
+
+**Response (200):**
+
+```json
+[
+  {
+    "id": "d94f1c4a-...",
+    "title": "Salário",
+    "price": 3000,
+    "type": "INCOME",
+    "category": "Trabalho",
+    "createdAt": "2025-06-15T00:00:00.000Z"
+  }
+]
+```
+
+---
+
+### Buscar Transação por ID (GET)
+
+**Request:**
+
+```bash
+curl -X GET http://localhost:3000/transactions/{id}
+```
+
+Substitua `{id}` pelo ID da transação.
+
+**Response (200):**
+
+```json
+{
+  "id": "d94f1c4a-...",
+  "title": "Salário",
+  "price": 3000,
+  "category": "Trabalho",
+  "type": "INCOME",
+  "createdAt": "2025-06-15T00:00:00.000Z"
+}
+```
+
+---
+
+### Atualizar Transação por ID (PATCH)
+
+**Request:**
+
+```bash
+curl -X PATCH http://localhost:3000/transactions/{id} \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Salário Atualizado","price":3500}'
+```
+
+Substitua `{id}` pelo ID da transação.
+
+**Response (200):**
+
+```json
+{
+  "id": "d94f1c4a-...",
+  "title": "Salário Atualizado",
+  "price": 3500,
+  "category": "Trabalho",
+  "type": "INCOME",
+  "createdAt": "2025-06-15T00:00:00.000Z"
+}
+```
+
+---
+
+### Remover Transação por ID (DELETE)
+
+**Request:**
+
+```bash
+curl -X DELETE http://localhost:3000/transactions/{id}
+```
+
+Substitua `{id}` pelo ID da transação.
+
+**Response (204):**
+
+Sem conteúdo.
+
+---
+
 
 ## Deployment
 
