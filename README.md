@@ -83,6 +83,52 @@ Check out a few resources that may come in handy when working with NestJS:
 - To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
 - Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
+## Paginação de Transações
+
+A rota `GET /transaction` suporta paginação utilizando os parâmetros `skip` e `take`.
+
+### Parâmetros:
+- `skip` (opcional): Quantos registros pular (padrão: 0)
+- `take` (opcional): Quantos registros retornar (padrão: 10)
+
+### Exemplo de requisição:
+
+```
+GET /transaction?skip=0&take=10
+```
+
+### Exemplo de resposta:
+```json
+{
+  "transactions": [
+    {
+      "id": "...",
+      "title": "...",
+      "price": 100,
+      "category": "...",
+      "data": "2024-01-01T00:00:00.000Z",
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2024-01-01T00:00:00.000Z",
+      "type": "OUTCOME"
+    }
+  ],
+  "totalCount": 50
+}
+```
+
+### Como consumir no frontend (exemplo com fetch):
+
+```js
+fetch('/transaction?skip=0&take=10')
+  .then(res => res.json())
+  .then(data => {
+    console.log(data.transactions); // array de transações
+    console.log(data.totalCount); // total de registros
+  });
+```
+
+---
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).

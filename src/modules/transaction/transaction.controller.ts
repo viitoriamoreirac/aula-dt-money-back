@@ -8,10 +8,12 @@ import {
   Delete,
   Res,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { PaginationDto } from './dto/pagination.dto';
 import { Response } from 'express';
 
 @Controller('transaction')
@@ -30,8 +32,8 @@ export class TransactionController {
   }
 
   @Get()
-  async findAll(@Res() res: Response) {
-    const transactions = await this.transactionService.findAll();
+  async findAll(@Query() paginationDto: PaginationDto, @Res() res: Response) {
+    const transactions = await this.transactionService.findAll(paginationDto);
     return res.status(HttpStatus.OK).send(transactions);
   }
 
